@@ -25,17 +25,24 @@ export default class Login extends Component {
   state = {
     fadeAnim: new Animated.Value(0),
     loginFadeAnim: new Animated.Value(0),
-    logoClickCounter: 1
+    logoClickCounter: 1,
+    x: new Animated.Value(-100),
+    inputName: "joey@repmanager.pro",
+    inputPassword: "somepass"
   };
 
   componentDidMount() {
+    Animated.spring(this.state.x, {
+      toValue: 0,
+      duration: 3000
+    }).start();
     Animated.timing(
       // Animate over time
       this.state.fadeAnim, // The animated value to drive
       {
         toValue: 1, // Animate to opacity: 1 (opaque)
         Easing: Easing.back(),
-        duration: 3000, // Make it take a while
+        duration: 2000, // Make it take a while
         useNativeDriver: true
       }
     ).start(); // Starts the animation
@@ -44,7 +51,7 @@ export default class Login extends Component {
       this.state.loginFadeAnim, // The animated value to drive
       {
         toValue: 1, // Animate to opacity: 1 (opaque)
-        duration: 500, // Make it take a while
+        duration: 1000, // Make it take a while
         useNativeDriver: true
       }
     ).start(); // Starts the animation
@@ -59,6 +66,9 @@ export default class Login extends Component {
       logoClickCounter: this.state.logoClickCounter + 1
     });
     if (this.state.logoClickCounter % 10 === 0) {
+      this.setState({
+        logoClickCounter: 0
+      });
       alert("That's enough!");
     }
   };
@@ -74,7 +84,15 @@ export default class Login extends Component {
               <TouchableOpacity onPress={this.logoPressHandler}>
                 <Animated.View
                   style={{
-                    opacity: this.state.fadeAnim
+                    opacity: this.state.fadeAnim,
+                    transform: [
+                      {
+                        translateY: this.state.loginFadeAnim.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [-500, 0]
+                        })
+                      }
+                    ]
                   }}
                 >
                   <Image
@@ -83,25 +101,52 @@ export default class Login extends Component {
                   />
                 </Animated.View>
               </TouchableOpacity>
-              <Item floatingLabel>
-                <Label style={style.textColor}>Username</Label>
-                <Input style={style.textColor} value="joey@repmanager.pro" />
-              </Item>
-              <Item floatingLabel last>
-                <Label style={style.textColor}>Password</Label>
-                <Input
-                  style={style.textColor}
-                  secureTextEntry={true}
-                  value="s0m1passw0rd"
-                />
-              </Item>
               <Animated.View
                 style={{
                   transform: [
                     {
-                      scale: this.state.loginFadeAnim.interpolate({
+                      translateX: this.state.loginFadeAnim.interpolate({
                         inputRange: [0, 1],
-                        outputRange: [2, 1]
+                        outputRange: [-200, 0]
+                      })
+                    }
+                  ]
+                }}
+              >
+                <Item floatingLabel>
+                  <Label style={style.textColor}>Username</Label>
+                  <Input style={style.textColor} value={this.state.inputName} />
+                </Item>
+              </Animated.View>
+
+              <Animated.View
+                style={{
+                  transform: [
+                    {
+                      translateX: this.state.loginFadeAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [200, 0]
+                      })
+                    }
+                  ]
+                }}
+              >
+                <Item floatingLabel last>
+                  <Label style={style.textColor}>Password</Label>
+                  <Input
+                    style={style.textColor}
+                    secureTextEntry={true}
+                    value={this.state.inputPassword}
+                  />
+                </Item>
+              </Animated.View>
+              <Animated.View
+                style={{
+                  transform: [
+                    {
+                      translateX: this.state.loginFadeAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [-200, 0]
                       })
                     }
                   ]
@@ -118,8 +163,24 @@ export default class Login extends Component {
                   <Text style={style.buttonText}>Login</Text>
                 </Button>
               </Animated.View>
-
-              <Text style={style.textForgotPass}>Forgot your password?</Text>
+              <Animated.View
+                style={{
+                  transform: [
+                    {
+                      translateY: this.state.loginFadeAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [200, 0]
+                      })
+                    }
+                  ]
+                }}
+              >
+                <TouchableOpacity>
+                  <Text style={style.textForgotPass}>
+                    Forgot your password?
+                  </Text>
+                </TouchableOpacity>
+              </Animated.View>
             </Form>
           </ImageBackground>
         </Content>
@@ -133,7 +194,8 @@ const style = {
     color: "white"
   },
   textForgotPass: {
-    marginTop: 15,
+    padding: 15,
+    paddingBottom: 30,
     color: "white",
     marginLeft: "auto",
     marginRight: "auto"
@@ -156,7 +218,7 @@ const style = {
     width: Dimensions.get("window").width
   },
   form: {
-    padding: 30,
+    // padding: 30,
     // backgroundColor: "rgba(226, 226, 226, 0.6)",
     borderRadius: 10,
     marginTop: Dimensions.get("window").height * 0.1,

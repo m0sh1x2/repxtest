@@ -23,7 +23,7 @@ import {
   Content
 } from "native-base";
 
-import { Font, AppLoading } from "expo";
+import { Font, AppLoading, ScreenOrientation } from "expo";
 
 import Home from "./src/screens/Home/Home";
 import Reports from "./src/screens/Reports/Reports";
@@ -35,6 +35,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { loading: true };
+    ScreenOrientation.allow("PORTRAIT_UP");
   }
 
   //Fix font loading issues

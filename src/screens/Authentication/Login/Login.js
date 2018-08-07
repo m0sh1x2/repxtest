@@ -12,13 +12,16 @@ import {
 } from "native-base";
 
 export default class Login extends Component {
+  static navigationOptions = {
+    drawerLabel: "Login"
+  };
   render() {
     return (
       <Container>
         <Content style={style.content}>
           <ImageBackground
             style={style.background}
-            source={require("../../../assets/test_bg.jpg")}
+            source={require("../../../assets/bg.webp")}
           >
             <Form style={style.form}>
               <Image
@@ -33,10 +36,17 @@ export default class Login extends Component {
                 <Label style={style.textColor}>Password</Label>
                 <Input style={style.textColor} secureTextEntry={true} />
               </Item>
-              <Button style={style.buttonLogin} block transparent>
+              <Button
+                onPress={() => {
+                  this.props.navigation.navigate("Home");
+                }}
+                style={style.buttonLogin}
+                block
+                transparent
+              >
                 <Text style={style.buttonText}>Login</Text>
               </Button>
-              <Text style={style.textColor}>Forgot your password?</Text>
+              <Text style={style.textForgotPass}>Forgot your password?</Text>
             </Form>
           </ImageBackground>
         </Content>
@@ -49,11 +59,18 @@ const style = {
   textColor: {
     color: "white"
   },
+  textForgotPass: {
+    marginTop: 15,
+    color: "white",
+    marginLeft: "auto",
+    marginRight: "auto"
+  },
   logo: {
     width: 200,
     height: 50,
     marginLeft: "auto",
-    marginRight: "auto"
+    marginRight: "auto",
+    tintColor: "white"
     // backgroundColor: "black"
   },
   content: {},
@@ -75,6 +92,10 @@ const style = {
     color: "white"
   },
   buttonLogin: {
+    marginTop: 30,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "white"
     // backgroundColor: "white"
   }
 };

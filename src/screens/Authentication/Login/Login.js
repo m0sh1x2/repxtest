@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { Text, Dimensions, Image, ImageBackground } from "react-native";
+import {
+  Text,
+  Dimensions,
+  Image,
+  ImageBackground,
+  Animated,
+  Easing,
+  TouchableOpacity
+} from "react-native";
 
 import {
   Container,
@@ -11,9 +19,48 @@ import {
   Button
 } from "native-base";
 
+import LottieView from "lottie-react-native";
+
 export default class Login extends Component {
+  state = {
+    fadeAnim: new Animated.Value(0),
+    loginFadeAnim: new Animated.Value(0),
+    logoClickCounter: 1
+  };
+
+  componentDidMount() {
+    Animated.timing(
+      // Animate over time
+      this.state.fadeAnim, // The animated value to drive
+      {
+        toValue: 1, // Animate to opacity: 1 (opaque)
+        Easing: Easing.back(),
+        duration: 3000, // Make it take a while
+        useNativeDriver: true
+      }
+    ).start(); // Starts the animation
+    Animated.timing(
+      // Animate over time
+      this.state.loginFadeAnim, // The animated value to drive
+      {
+        toValue: 1, // Animate to opacity: 1 (opaque)
+        duration: 500, // Make it take a while
+        useNativeDriver: true
+      }
+    ).start(); // Starts the animation
+  }
+
   static navigationOptions = {
     drawerLabel: "Login"
+  };
+
+  logoPressHandler = () => {
+    this.setState({
+      logoClickCounter: this.state.logoClickCounter + 1
+    });
+    if (this.state.logoClickCounter % 10 === 0) {
+      alert("That's enough!");
+    }
   };
   render() {
     return (
@@ -24,28 +71,54 @@ export default class Login extends Component {
             source={require("../../../assets/bg.webp")}
           >
             <Form style={style.form}>
-              <Image
-                style={style.logo}
-                source={require("../../../assets/logo.png")}
-              />
+              <TouchableOpacity onPress={this.logoPressHandler}>
+                <Animated.View
+                  style={{
+                    opacity: this.state.fadeAnim
+                  }}
+                >
+                  <Image
+                    style={style.logo}
+                    source={require("../../../assets/logo.png")}
+                  />
+                </Animated.View>
+              </TouchableOpacity>
               <Item floatingLabel>
                 <Label style={style.textColor}>Username</Label>
-                <Input style={style.textColor} />
+                <Input style={style.textColor} value="joey@repmanager.pro" />
               </Item>
               <Item floatingLabel last>
                 <Label style={style.textColor}>Password</Label>
-                <Input style={style.textColor} secureTextEntry={true} />
+                <Input
+                  style={style.textColor}
+                  secureTextEntry={true}
+                  value="s0m1passw0rd"
+                />
               </Item>
-              <Button
-                onPress={() => {
-                  this.props.navigation.navigate("Home");
+              <Animated.View
+                style={{
+                  transform: [
+                    {
+                      scale: this.state.loginFadeAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [2, 1]
+                      })
+                    }
+                  ]
                 }}
-                style={style.buttonLogin}
-                block
-                transparent
               >
-                <Text style={style.buttonText}>Login</Text>
-              </Button>
+                <Button
+                  onPress={() => {
+                    this.props.navigation.navigate("Home");
+                  }}
+                  style={style.buttonLogin}
+                  block
+                  transparent
+                >
+                  <Text style={style.buttonText}>Login</Text>
+                </Button>
+              </Animated.View>
+
               <Text style={style.textForgotPass}>Forgot your password?</Text>
             </Form>
           </ImageBackground>
@@ -70,7 +143,8 @@ const style = {
     height: 50,
     marginLeft: "auto",
     marginRight: "auto",
-    tintColor: "white"
+    tintColor: "white",
+    marginBottom: 30
     // backgroundColor: "black"
   },
   content: {},

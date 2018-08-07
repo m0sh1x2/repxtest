@@ -28,6 +28,7 @@ import { Font, AppLoading } from "expo";
 import Home from "./src/screens/Home/Home";
 import Reports from "./src/screens/Reports/Reports";
 import Settings from "./src/screens/Settings/Settings";
+import Login from "./src/screens/Authentication/Login/Login";
 import CustomNavigation from "./src/screens/CustomNavigation/CustomNavigation";
 
 class App extends React.Component {
@@ -62,10 +63,11 @@ const RootStack = createDrawerNavigator(
   {
     Home: Home,
     Reports: Reports,
-    Settings: Settings
+    Settings: Settings,
+    Login: Login
   },
   {
-    initialRouteName: "Home",
+    initialRouteName: "Login",
     // drawerWidth: 320,
     contentComponent: CustomNavigation
   }

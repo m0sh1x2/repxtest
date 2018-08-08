@@ -1,27 +1,9 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  Image,
-  View,
-  StatusBar,
-  ScrollView,
-  SafeAreaView
-} from "react-native";
+import { StatusBar } from "react-native";
 
-import { createDrawerNavigator, DrawerItems } from "react-navigation";
+import { createDrawerNavigator, createStackNavigator } from "react-navigation";
 
-import {
-  Container,
-  Icon,
-  Button,
-  Left,
-  Body,
-  Header,
-  Footer,
-  FooterTab,
-  Content
-} from "native-base";
+import { Container } from "native-base";
 
 import { Font, AppLoading, ScreenOrientation } from "expo";
 
@@ -29,6 +11,7 @@ import Home from "./src/screens/Home/Home";
 import Reports from "./src/screens/Reports/Reports";
 import Settings from "./src/screens/Settings/Settings";
 import Login from "./src/screens/Authentication/Login/Login";
+import ResetPassword from "./src/screens/Authentication/ResetPassword/ResetPassword";
 import CustomNavigation from "./src/screens/CustomNavigation/CustomNavigation";
 
 class App extends React.Component {
@@ -60,17 +43,42 @@ class App extends React.Component {
   }
 }
 
-const RootStack = createDrawerNavigator(
+const AuthStack = createStackNavigator(
+  {
+    Login: Login,
+    ResetPassword: ResetPassword
+  },
+  {
+    headerMode: "none",
+    initialRouteName: "ResetPassword",
+    cardStyle: {
+      opacity: 1
+    }
+  }
+);
+
+const DrawerStack = createDrawerNavigator(
   {
     Home: Home,
     Reports: Reports,
     Settings: Settings,
-    Login: Login
+    Login: AuthStack
   },
   {
-    initialRouteName: "Login",
     // drawerWidth: 320,
-    contentComponent: CustomNavigation
+    contentComponent: CustomNavigation,
+    initialRouteName: "Home"
+  }
+);
+
+const RootStack = createStackNavigator(
+  {
+    Drawer: DrawerStack,
+    Auth: AuthStack
+  },
+  {
+    initialRouteName: "Auth",
+    headerMode: "none"
   }
 );
 

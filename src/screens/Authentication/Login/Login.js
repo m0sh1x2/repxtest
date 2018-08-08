@@ -74,7 +74,7 @@ export default class Login extends Component {
   };
   render() {
     return (
-      <Container>
+      <Container style={style.container}>
         <Content style={style.content}>
           <ImageBackground
             style={style.background}
@@ -175,7 +175,11 @@ export default class Login extends Component {
                   ]
                 }}
               >
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate("ResetPassword");
+                  }}
+                >
                   <Text style={style.textForgotPass}>
                     Forgot your password?
                   </Text>
@@ -190,6 +194,9 @@ export default class Login extends Component {
 }
 
 const style = {
+  container: {
+    backgroundColor: "black"
+  },
   textColor: {
     color: "white"
   },

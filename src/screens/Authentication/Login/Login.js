@@ -19,7 +19,7 @@ import {
   Button
 } from "native-base";
 
-import LottieView from "lottie-react-native";
+import { Constants, Notifications } from "expo";
 
 export default class Login extends Component {
   state = {
@@ -31,7 +31,31 @@ export default class Login extends Component {
     inputPassword: "somepass"
   };
 
+  // Experimental local push notifications, remove and set in a normal component
+  localNotificationHandler = () => {
+    console.log("local notificaiton called");
+    const localnotification = {
+      title: "New Mention for WPX",
+      body: "Just a dummy local notification!",
+      android: {
+        sound: true
+      },
+      ios: {
+        sound: true
+      }
+    };
+    let sendAfterFiveSeconds = Date.now();
+    sendAfterFiveSeconds += 5000;
+
+    const schedulingOptions = { time: sendAfterFiveSeconds };
+    Notifications.scheduleLocalNotificationAsync(
+      localnotification,
+      schedulingOptions
+    );
+  };
+
   componentDidMount() {
+    // Set the animations once the component has fully loaded
     Animated.spring(this.state.x, {
       toValue: 0,
       duration: 3000
@@ -154,6 +178,7 @@ export default class Login extends Component {
               >
                 <Button
                   onPress={() => {
+                    // this.localNotificationHandler();
                     this.props.navigation.navigate("Home");
                   }}
                   style={style.buttonLogin}

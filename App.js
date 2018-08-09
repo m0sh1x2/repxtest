@@ -50,7 +50,8 @@ const AuthStack = createStackNavigator(
   },
   {
     headerMode: "none",
-    initialRouteName: "ResetPassword",
+    initialRouteName: "Login",
+    // Fix screen flashing on card swipes
     cardStyle: {
       opacity: 1
     }
